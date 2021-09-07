@@ -31,6 +31,17 @@ ingress:
 
   tls: []
 
+route:
+  enabled: false
+  annotations: { }
+  host:
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+    key:
+    certificate:
+    caCertificate:
+
 resources: {}
   # limits:
   #   cpu: 100m

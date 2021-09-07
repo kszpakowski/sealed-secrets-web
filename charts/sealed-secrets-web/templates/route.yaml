@@ -1,0 +1,35 @@
+{{- if .Values.route.enabled -}}
+{{- $fullName := include "sealed-secrets-web.fullname" . -}}
+apiVersion: v1
+kind: Route
+metadata:
+  name: {{ $fullName }}
+  labels:
+{{ include "sealed-secrets-web.labels" . | indent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.route.host }}
+  host: www.example.com
+  {{- end }}
+  to:
+    kind: Service
+    name: {{ $fullName }}
+  tls:
+    termination: {{ .Values.route.tls.termination }}
+    insecureEdgeTerminationPolicy: {{ .Values.route.tls.insecureEdgeTerminationPolicy }}
+    {{- if .Values.route.tls.key }}
+    key: |
+      {{- .Values.route.tls.key | nindent 6 }}
+    {{- end }}
+    {{- if .Values.route.tls.certificate }}
+    certificate: |
+      {{- .Values.route.tls.certificate | nindent 6 }}
+    {{- end }}
+    {{- if .Values.route.tls.caCertificate }}
+    caCertificate: |
+      {{- .Values.route.tls.caCertificate | nindent 6 }}
+    {{- end }}
+{{- end }}
