@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/bitnami-labs/sealed-secrets v0.16.0
+	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.4
 	github.com/golang/mock v1.6.0
 	github.com/google/uuid v1.3.0

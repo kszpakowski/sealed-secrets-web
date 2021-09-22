@@ -18,6 +18,7 @@ import (
 	"github.com/bakito/sealed-secrets-web/pkg/secrets"
 	"github.com/bakito/sealed-secrets-web/pkg/version"
 	ssClient "github.com/bitnami-labs/sealed-secrets/pkg/client/clientset/versioned/typed/sealed-secrets/v1alpha1"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	corev1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
@@ -86,6 +87,7 @@ func setupRouter(coreClient corev1.CoreV1Interface, ssClient ssClient.BitnamiV1a
 
 	r := gin.New()
 	r.Use(gin.Recovery())
+	r.Use(cors.Default())
 	h := handler.New(indexHTML, sealer, cfg)
 
 	r.GET("/", h.Index)
@@ -94,6 +96,7 @@ func setupRouter(coreClient corev1.CoreV1Interface, ssClient ssClient.BitnamiV1a
 
 	api := r.Group("/api")
 
+	api.GET("/namespaces", h.Namespaces)
 	api.GET("/version", h.Version)
 	api.POST("/seal", h.Seal)
 	api.POST("/raw", h.Raw)
