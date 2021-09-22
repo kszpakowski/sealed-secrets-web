@@ -8,7 +8,9 @@ import (
 )
 
 type secret struct {
-	Secret string `json:"secret"`
+	Secret    string `json:"secret"`
+	Scope     string `json:"scope"`
+	Namespace string `json:"namespace"`
 }
 
 func (h *Handler) Seal(c *gin.Context) {
@@ -18,7 +20,7 @@ func (h *Handler) Seal(c *gin.Context) {
 		return
 	}
 
-	ss, err := h.sealer.Secret(data.Secret)
+	ss, err := h.sealer.Secret(data.Secret, data.Scope, data.Namespace)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

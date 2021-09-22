@@ -8,7 +8,7 @@ import (
 )
 
 type Sealer interface {
-	Secret(secret string) ([]byte, error)
+	Secret(secret string, scope string, namespace string) ([]byte, error)
 	Raw(data Raw) ([]byte, error)
 }
 
@@ -23,8 +23,8 @@ type sealer struct {
 	args []string
 }
 
-func (s *sealer) Secret(secret string) ([]byte, error) {
-	return s.kubeseal(secret)
+func (s *sealer) Secret(secret string, scope string, namespace string) ([]byte, error) {
+	return s.kubeseal(secret, "--scope", scope, "--namespace", namespace)
 }
 
 func (s *sealer) Raw(data Raw) ([]byte, error) {
